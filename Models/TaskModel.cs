@@ -15,6 +15,7 @@ namespace TaskApi.Models
 
         [Column(TypeName = "Text")]
         public string Description { get; set; }
+
         public bool Completed { get; set; }
     }
 }
