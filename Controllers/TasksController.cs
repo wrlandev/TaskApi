@@ -34,5 +34,30 @@ namespace TaskApi.Controllers
 
             return StatusCode(201, task);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] TaskModel task)
+        {
+            if (string.IsNullOrEmpty(task.Title))
+            {
+                return StatusCode(400, new ErrorView { Message = "Title Is Required" });
+            }
+
+            var taskDb = _context.Tasks.Find(id);
+
+            if (taskDb == null)
+            {
+                return StatusCode(404, new ErrorView { Message = $"Id ({id}) not found" });
+            }
+
+            taskDb.Title = task.Title;
+            taskDb.Description = task.Description;
+            taskDb.Completed = task.Completed;
+
+            _context.Tasks.Update(taskDb);
+            _context.SaveChanges();
+
+            return StatusCode(200, task);
+        }
     }
 }
