@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using TaskApi.Data;
 using TaskApi.DTOs;
-using TaskApi.Models;
-using TaskApi.Models.Errors;
-using TaskApi.ModelViews;
-using TaskApi.Services;
+using TaskApi.Services.Interfaces;
 
 namespace TaskApi.Controllers
 {
@@ -13,8 +8,8 @@ namespace TaskApi.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
-        private readonly TaskService _service;
-        public TasksController(TaskService service)
+        private readonly ITaskService _service;
+        public TasksController(ITaskService service)
         {
             _service = service;
         }

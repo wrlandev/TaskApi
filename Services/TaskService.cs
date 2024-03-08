@@ -2,11 +2,11 @@
 using TaskApi.DTOs;
 using TaskApi.Models;
 using TaskApi.Models.Errors;
-using TaskApi.ModelViews;
+using TaskApi.Services.Interfaces;
 
 namespace TaskApi.Services
 {
-    public class TaskService
+    public class TaskService : ITaskService
     {
         private readonly AppDbContext _context;
         public TaskService(AppDbContext context)
@@ -45,7 +45,7 @@ namespace TaskApi.Services
         {
             var taskDb = _context.Tasks.Find(id);
 
-            if(taskDb == null)
+            if (taskDb == null)
             {
                 throw new TaskError("Task not found");
             }
