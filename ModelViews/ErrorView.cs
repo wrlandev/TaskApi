@@ -1,6 +1,6 @@
 ﻿namespace TaskApi.ModelViews
 {
-    public class ErrorView
+    public struct ErrorView
     {
         public string Message { get; set; }
     }

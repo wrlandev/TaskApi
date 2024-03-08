@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TaskApi.Data;
+using TaskApi.DTOs;
 using TaskApi.Models;
 using TaskApi.ModelViews;
 
@@ -23,12 +24,20 @@ namespace TaskApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] TaskModel task)
+        public IActionResult Create([FromBody] TaskDto taskDto)
         {
-            if (string.IsNullOrEmpty(task.Title))
+            if (string.IsNullOrEmpty(taskDto.Title))
             {
                 return StatusCode(400, new ErrorView { Message = "Title Is Required" });
             }
+
+            var task = new TaskModel
+            {
+                Title = taskDto.Title,
+                Description = taskDto.Description,
+                Completed = taskDto.Completed
+
+            };
 
             _context.Tasks.Add(task);
             _context.SaveChanges();
@@ -37,9 +46,9 @@ namespace TaskApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] TaskModel task)
+        public IActionResult Update([FromRoute] int id, [FromBody] TaskDto taskDto)
         {
-            if (string.IsNullOrEmpty(task.Title))
+            if (string.IsNullOrEmpty(taskDto.Title))
             {
                 return StatusCode(400, new ErrorView { Message = "Title Is Required" });
             }
@@ -51,14 +60,14 @@ namespace TaskApi.Controllers
                 return StatusCode(404, new ErrorView { Message = $"Id ({id}) not found" });
             }
 
-            taskDb.Title = task.Title;
-            taskDb.Description = task.Description;
-            taskDb.Completed = task.Completed;
+            taskDb.Title = taskDto.Title;
+            taskDb.Description = taskDto.Description;
+            taskDb.Completed = taskDto.Completed;
 
             _context.Tasks.Update(taskDb);
             _context.SaveChanges();
 
-            return StatusCode(200, task);
+            return StatusCode(200, taskDto);
         }
 
         [HttpGet("{id}")]
