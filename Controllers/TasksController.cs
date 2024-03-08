@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using TaskApi.Data;
 using TaskApi.Models;
 using TaskApi.ModelViews;
@@ -24,7 +25,7 @@ namespace TaskApi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] TaskModel task)
         {
-            if(string.IsNullOrEmpty(task.Title))
+            if (string.IsNullOrEmpty(task.Title))
             {
                 return StatusCode(400, new ErrorView { Message = "Title Is Required" });
             }
@@ -58,6 +59,19 @@ namespace TaskApi.Controllers
             _context.SaveChanges();
 
             return StatusCode(200, task);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById([FromRoute] int id)
+        {
+            var taskDb = _context.Tasks.Find(id);
+
+            if (taskDb == null)
+            {
+                return StatusCode(404, new ErrorView { Message = $"Id ({id}) not found" });
+            }
+
+            return StatusCode(200, taskDb);
         }
     }
 }
