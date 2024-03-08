@@ -73,5 +73,21 @@ namespace TaskApi.Controllers
 
             return StatusCode(200, taskDb);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            var taskDb = _context.Tasks.Find(id);
+
+            if (taskDb == null)
+            {
+                return StatusCode(404, new ErrorView { Message = $"Id ({id}) not found" });
+            }
+
+            _context.Tasks.Remove(taskDb);
+            _context.SaveChanges();
+
+            return StatusCode(204);
+        }
     }
 }
